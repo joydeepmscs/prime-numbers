@@ -1,8 +1,12 @@
 package com.rbs.assignment.controller;
 
+import com.rbs.assignment.model.PrimeNumberResponse;
 import com.rbs.assignment.service.PrimeNumberService;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,21 +30,26 @@ public class PrimeController {
      * @return a list of prime numbers from 2 to the upperBound (inclusive)
      */
 
-    @RequestMapping(method = RequestMethod.GET, value = "/primes/{upperbound}", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE,MediaType.APPLICATION_XML_VALUE,MediaType.TEXT_HTML_VALUE},consumes = MediaType.ALL_VALUE)
-    List<Integer> primes(@PathVariable("upperbound") int upperBound,
-                         @RequestParam(value = "algorithm", required = false, defaultValue = "0") int algorithm) {
+    @RequestMapping(method = RequestMethod.GET, value = "/primes/{upperbound}", produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE},consumes = MediaType.ALL_VALUE)
+    ResponseEntity<PrimeNumberResponse> primes(@PathVariable("upperbound") int upperBound,
+                                              @ApiParam(value = "algorithm",allowableValues = "fast,slow,sieve") @RequestParam(value = "algorithm",required = false,defaultValue = "sieve") String algorithm) {
+
         List<Integer> primeNumbers=null;
         switch (algorithm) {
-            case 1:
+            case "fast":
                 primeNumbers = primeNumberService.getPrimesUsingFastLoop(upperBound);
                 break;
-            case 2:
+            case "slow":
                 primeNumbers = primeNumberService.getPrimes(upperBound);
                 break;
             default:
                 primeNumbers = primeNumberService.getPrimesUsingSieve(upperBound);
         }
-        return primeNumbers;
+        PrimeNumberResponse primeNumberResponse= new PrimeNumberResponse();
+        primeNumberResponse.setInitials(upperBound);
+        primeNumberResponse.setPrimes(primeNumbers);
+        ResponseEntity<PrimeNumberResponse> responseEntity= new ResponseEntity<>(primeNumberResponse, HttpStatus.OK);
+        return responseEntity;
     }
 
 }

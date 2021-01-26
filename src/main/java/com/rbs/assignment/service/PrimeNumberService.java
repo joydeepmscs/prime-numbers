@@ -12,17 +12,12 @@ import java.util.List;
 public interface PrimeNumberService {
 
     /**
-     * @see PrimeNumberUtil#isPrimeByOdds(int)
+     * @see PrimeNumberUtil#isPrimeBySlow(int)
      */
-    boolean isPrime(int n);
+    boolean isPrimeSlow(int n);
 
     /**
-     * @see PrimeNumberUtil#isPrimeBySieve(int)
-     */
-    boolean isPrimeSieve(int n);
-
-    /**
-     * @see PrimeNumberUtil#isPrimeByOddsExcludingMultiplesOfThree(int)
+     * @see PrimeNumberUtil#isPrimeByFast(int)
      */
     boolean isPrimeFastLoop(int n);
 

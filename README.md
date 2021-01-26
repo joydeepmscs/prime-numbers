@@ -19,8 +19,9 @@ The project uses [Spring Boot](http://projects.spring.io/spring-boot/) which mak
 
 From the project base directory you can run `mvn spring-boot:run` which will start the application on `http://localhost:8080`
 
-## Using the Project API
+You can access Swagger UI on http://localhost:8080/v1/swagger-ui.html
 
+## Using the Project API
 The project is configured with two RESTful API operations:
 
 * [Generate Primes](#generate-primes)
@@ -34,7 +35,7 @@ When called, this API operation will generate prime numbers from `2` to `upperBo
 The example below will return a JSON array of prime numbers from `2` to the given `upperBound`
 
 ```
-$ curl -v http://localhost:8080/primes?upperBound=100
+$ curl -v http://localhost:8080/v1/primes/100
 *   Trying ::1...
 * Connected to localhost (::1) port 8080 (#0)
 > GET /primes?upperBound=100 HTTP/1.1
@@ -55,7 +56,7 @@ $ curl -v http://localhost:8080/primes?upperBound=100
 The example above can be executed again, using the fast algorithm.
 
 ```
-$ curl -v http://localhost:8080/primes/100?algorithm=2
+$ curl -v http://localhost:8080/v1/primes/100?algorithm=fast
 *   Trying ::1...
 * Connected to localhost (::1) port 8080 (#0)
 > GET /primes/121?algorithm=2 HTTP/1.1
@@ -76,7 +77,7 @@ $ curl -v http://localhost:8080/primes/100?algorithm=2
 Similarly, the example above can be executed again, using the slower algorithm.
 
 ```
-$ curl -v http://localhost:8080/primes/100?algorithm=3
+$ curl -v http://localhost:8080/v1/primes/100?algorithm=slow
 *   Trying ::1...
 * Connected to localhost (::1) port 8080 (#0)
 > GET /primes/121?algorithm=3 HTTP/1.1

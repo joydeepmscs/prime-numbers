@@ -25,10 +25,10 @@ public class PrimeNumberServiceImplTest {
     public void testPrimeGenerator() {
 
         final List<Integer> primes = service.getPrimes(5000);
-        assertEquals("'primes' and 'KNOWN_PRIMES' should be equal in size", KNOWN_PRIMES.length, primes.size());
+        assertEquals("'primes' and 'KNOWN_PRIMES' should be equal in size", KNOWN_PRIMES.size(), primes.size());
 
-        for (int i = 0; i < KNOWN_PRIMES.length; i++) {
-            assertEquals("'primes.get(i)' should equal 'KNOWN_PRIMES[i]'", KNOWN_PRIMES[i], primes.get(i).intValue());
+        for (int i = 0; i < KNOWN_PRIMES.size(); i++) {
+            assertEquals("'primes.get(i)' should equal 'KNOWN_PRIMES[i]'", KNOWN_PRIMES.get(i), primes.get(i));
         }
     }
 }

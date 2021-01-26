@@ -15,18 +15,14 @@ import java.util.stream.IntStream;
 public class PrimeNumberServiceImpl implements PrimeNumberService {
 
     @Override
-    public boolean isPrime(int n) {
-        return PrimeNumberUtil.isPrimeByOdds(n);
+    public boolean isPrimeSlow(int n) {
+        return PrimeNumberUtil.isPrimeBySlow(n);
     }
 
-    @Override
-    public boolean isPrimeSieve(int n) {
-        return PrimeNumberUtil.isPrimeBySieve(n);
-    }
 
     @Override
     public boolean isPrimeFastLoop(int n) {
-        return PrimeNumberUtil.isPrimeByOddsExcludingMultiplesOfThree(n);
+        return PrimeNumberUtil.isPrimeByFast(n);
     }
 
     @Override
@@ -38,22 +34,14 @@ public class PrimeNumberServiceImpl implements PrimeNumberService {
         // Naive example using Java 8 Stream API and multi-threading using parallel.
         // Could have more thread control using ForkJoinPool directly
         return IntStream.rangeClosed(2, upperBound).parallel()
-                .filter(this::isPrime)
+                .filter(this::isPrimeSlow)
                 .boxed()
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Integer> getPrimesUsingSieve(int upperBound) {
-        if (upperBound < 2) {
-            return Collections.emptyList();
-        }
-
-        // Naive example using Java 8 Stream API and multi-threading using parallel.
-        return IntStream.rangeClosed(2, upperBound).parallel()
-                .filter(this::isPrimeSieve)
-                .boxed()
-                .collect(Collectors.toList());
+        return PrimeNumberUtil.isPrimeBySieve(upperBound);
     }
 
     @Override
