@@ -3,9 +3,10 @@ package com.rbs.assignment.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
+
 /**
- *  @author Joydeep Paul
- * */
+ * @author Joydeep Paul
+ */
 public class ErrorResponse {
     @JsonProperty("code")
     private String code = null;

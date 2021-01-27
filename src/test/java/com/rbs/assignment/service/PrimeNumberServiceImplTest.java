@@ -32,6 +32,7 @@ public class PrimeNumberServiceImplTest {
             assertEquals("'primes.get(i)' should equal 'KNOWN_PRIMES[i]'", KNOWN_PRIMES.get(i), primes.get(i));
         }
     }
+
     @Test
     public void testPrimeGeneratorUsingSlowLoop() throws PrimeNumberProcessingException {
 
@@ -60,8 +61,8 @@ public class PrimeNumberServiceImplTest {
         final List<Integer> primes1 = service.getPrimesUsingFastLoop(1);
         final List<Integer> primes2 = service.getPrimesUsingSlowLoop(-100);
         final List<Integer> primes3 = service.getPrimesUsingSieve(1);
-        assertEquals(primes1,primes2);
-        assertEquals(primes1,primes3);
+        assertEquals(primes1, primes2);
+        assertEquals(primes1, primes3);
 
     }
 

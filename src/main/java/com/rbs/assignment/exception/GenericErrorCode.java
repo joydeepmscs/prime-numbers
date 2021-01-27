@@ -3,6 +3,9 @@ package com.rbs.assignment.exception;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Joydeep Paul
+ */
 public enum GenericErrorCode implements ErrorCode {
 
     /**
@@ -11,8 +14,8 @@ public enum GenericErrorCode implements ErrorCode {
      * <b>Action: None</b><br>
      */
     GEN_001("GEN-001", "An unexpected error occurred generating prime numbers. Please contact System Administrator"),
-    GEN_002("GEN-002", "Please choose an upper bound value less than 10^7 range"),
-    GEN_003("GEN-003", "Please choose an upper bound value less than 10^6 range to use slow algorithm");
+    GEN_002("GEN-002", "Please choose an upper bound value less than equal to 10^7 range"),
+    GEN_003("GEN-003", "Please choose an upper bound value less than equal to 10^6 range to use slow algorithm");
 
     private static final Map<String, GenericErrorCode> LOOKUP = new HashMap<String, GenericErrorCode>();
 
