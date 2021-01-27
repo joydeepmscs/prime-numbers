@@ -38,7 +38,7 @@ The example below will return a JSON array of prime numbers from `2` to the give
 $ curl -v http://localhost:8080/v1/primes/100
 *   Trying ::1...
 * Connected to localhost (::1) port 8080 (#0)
-> GET /primes?upperBound=100 HTTP/1.1
+> GET /v1/primes/100 HTTP/1.1
 > Host: localhost:8080
 > User-Agent: curl/7.43.0
 > Accept: */*
@@ -56,10 +56,10 @@ $ curl -v http://localhost:8080/v1/primes/100
 The example above can be executed again, using the fast algorithm.
 
 ```
-$ curl -v http://localhost:8080/v1/primes/100?algorithm=fast
+$ curl -v http://localhost:8080/v1/primes/100?algorithm=sieve
 *   Trying ::1...
 * Connected to localhost (::1) port 8080 (#0)
-> GET /primes/121?algorithm=2 HTTP/1.1
+> GET /v1/primes/100?algorithm=sieve HTTP/1.1
 > Host: localhost:8080
 > User-Agent: curl/7.43.0
 > Accept: */*
@@ -80,7 +80,7 @@ Similarly, the example above can be executed again, using the slower algorithm.
 $ curl -v http://localhost:8080/v1/primes/100?algorithm=slow
 *   Trying ::1...
 * Connected to localhost (::1) port 8080 (#0)
-> GET /primes/121?algorithm=3 HTTP/1.1
+> GET /v1/primes/100?algorithm=slow HTTP/1.1
 > Host: localhost:8080
 > User-Agent: curl/7.43.0
 > Accept: */*
