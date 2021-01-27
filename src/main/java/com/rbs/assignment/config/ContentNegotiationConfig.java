@@ -13,7 +13,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class ContentNegotiationConfig implements WebMvcConfigurer {
 
     /**
-     *  Total customization - see below for explanation.
+     *  This Configuration enables content negotiation based on different requested types
+     *   @author Joydeep Paul
      */
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
@@ -23,7 +24,6 @@ public class ContentNegotiationConfig implements WebMvcConfigurer {
                 ignoreAcceptHeader(false).
                 defaultContentType(MediaType.APPLICATION_JSON).
                 mediaType("xml", MediaType.APPLICATION_XML).
-                mediaType("html", MediaType.TEXT_HTML).
                 mediaType("json", MediaType.APPLICATION_JSON);
     }
 

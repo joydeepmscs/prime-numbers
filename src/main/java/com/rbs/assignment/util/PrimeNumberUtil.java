@@ -11,30 +11,12 @@ import java.util.List;
  */
 public class PrimeNumberUtil {
 
-    static final boolean[] sieve = new boolean[200];
-
-    static {
-        Arrays.fill(sieve, 2, sieve.length, true);
-
-        for (int i = 2; i<=Math.sqrt(sieve.length); i++) {
-            if (sieve[i]) {
-                for (int j = i*i; j < sieve.length; j+=i) {       // making 2p, 3p, ... false
-                    sieve[j] = false;
-                }
-
-            }
-        }
-    }
-
     /**
-     * A method to determine if {@code n} is a prime number.
-     * This method first attempts to check for simple known prime and non-prime numbers, afterward
-     * it uses trial-by-division using an incrementing odd number to iterate by.
-     *
+     * A method to determine if {@code n} is a prime number using sqrt n iteration.
      * @param n The number which shall be determined to be prime or non-prime
      * @return {@code true} if {@code n} is prime, otherwise {@code false}
      */
-    public static boolean isPrimeByFast(int n) {
+    public static boolean isPrimeByFastLoop(int n) {
         if (n <= 1) {
             // numbers less than 2 are not considered prime
             return false;
@@ -49,14 +31,11 @@ public class PrimeNumberUtil {
     }
 
     /**
-     * A method to determine if {@code n} is a prime number.
-     * This method is similar to {@link #isPrimeByFast(int)}, but instead of incrementing by each odd number,
-     * it increments by each odd number that is not a multiple of 3. This saves loop iterations.
-     *
+     * A method to determine if {@code n} is a prime number using n iteration.
      * @param n The number which shall be determined to be prime or non-prime
      * @return {@code true} if {@code n} is prime, otherwise {@code false}
      */
-    public static boolean isPrimeBySlow(int n) {
+    public static boolean isPrimeBySlowLoop(int n) {
 
         if (n <= 1) {
             // numbers less than 2 are not considered prime
@@ -71,13 +50,10 @@ public class PrimeNumberUtil {
         }
         return true;
     }
-    /**
-     * A method to determine if {@code n} is a prime number.
-     * This method is similar to {@link #isPrimeBySieve(int)}, but also checks a sieve which
-     * contains numerous pre-calculated prime and non-prime numbers.
-     *
-     * @param n The number which shall be determined to be prime or non-prime
-     * @return {@code true} if {@code n} is prime, otherwise {@code false}
+
+    /** This method returns list of prime number for a given range using sieve of eratosthenes
+     * @param n The inclusive upper bound to limit the size of the returned primes
+     * @return a {@link List} of prime numbers given an (inclusive) upper bound
      */
     public static List<Integer> isPrimeBySieve(int n) {
         final List<Integer> primeNumbers= new ArrayList<>();
@@ -91,7 +67,7 @@ public class PrimeNumberUtil {
         }
         for (int i = 2; i<=Math.sqrt(n); i++) {
             if (sieve[i]) {
-                for (int j = i*i; j <= n; j+=i) {       // making 2p, 3p, ... false
+                for (int j = i*i; j <= n; j+=i) { // making 2p, 3p, ... false
                     sieve[j] = false;
                 }
 

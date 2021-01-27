@@ -2,12 +2,16 @@ package com.rbs.assignment.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.List;
-
+/**
+ *  @author Joydeep Paul
+ */
 @XmlRootElement
 public class PrimeNumberResponse implements Serializable {
     @JsonProperty("Initials")
@@ -34,5 +38,16 @@ public class PrimeNumberResponse implements Serializable {
     public void setPrimes(List<Integer> primes) {
         this.primes = primes;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return new EqualsBuilder().append(this, obj).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(this).hashCode();
+    }
+
 
 }

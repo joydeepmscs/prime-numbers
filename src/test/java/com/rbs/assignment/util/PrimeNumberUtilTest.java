@@ -87,7 +87,7 @@ public class PrimeNumberUtilTest {
         // Validate prime numbers
         for (int i = 0; i < KNOWN_PRIMES.size(); i++) {
             final int prime = (int)KNOWN_PRIMES.get(i);
-            assertTrue(prime + " is a prime number", PrimeNumberUtil.isPrimeByFast(prime));
+            assertTrue(prime + " is a prime number", PrimeNumberUtil.isPrimeByFastLoop(prime));
         }
 
         // Validate composite numbers within the same range
@@ -97,7 +97,7 @@ public class PrimeNumberUtilTest {
 
             if (end - start > 1) {
                 for (int k = start + 1; k < end; k++) {
-                    assertFalse(k + " is a composite number", PrimeNumberUtil.isPrimeByFast(k));
+                    assertFalse(k + " is a composite number", PrimeNumberUtil.isPrimeByFastLoop(k));
                 }
             }
         }
@@ -109,7 +109,7 @@ public class PrimeNumberUtilTest {
         // Validate prime numbers
         for (int i = 0; i < KNOWN_PRIMES.size(); i++) {
             final int prime = KNOWN_PRIMES.get(i);
-            assertTrue(prime + " is a prime number", PrimeNumberUtil.isPrimeBySlow(prime));
+            assertTrue(prime + " is a prime number", PrimeNumberUtil.isPrimeBySlowLoop(prime));
         }
 
         // Validate composite numbers within the same range
@@ -119,7 +119,7 @@ public class PrimeNumberUtilTest {
 
             if (end - start > 1) {
                 for (int k = start + 1; k < end; k++) {
-                    assertFalse(k + " is a composite number", PrimeNumberUtil.isPrimeBySlow(k));
+                    assertFalse(k + " is a composite number", PrimeNumberUtil.isPrimeBySlowLoop(k));
                 }
             }
         }
@@ -132,19 +132,5 @@ public class PrimeNumberUtilTest {
             assertEquals(KNOWN_PRIMES, PrimeNumberUtil.isPrimeBySieve(5000));
     }
 
-    @Test
-    public void testSieve() {
-        for (int i = 0; i < PrimeNumberUtil.sieve.length; i++) {
-            final boolean isPrime = PrimeNumberUtil.sieve[i];
-            if (i == 0 || i == 1) {
-                assertFalse(isPrime);
-            } else if (isPrime) {
-                // the sieve believes that i is prime, it should be reported as such.
-                assertTrue(i + " is reported as prime by sieve", PrimeNumberUtil.isPrimeByFast(i));
-            } else {
-                // the sieve believes that i is non-prime, it should be reported as such.
-                assertFalse(i + " is reported as non-prime by sieve", PrimeNumberUtil.isPrimeByFast(i));
-            }
-        }
-    }
 }
+

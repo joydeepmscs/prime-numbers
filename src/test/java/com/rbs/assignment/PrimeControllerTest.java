@@ -1,7 +1,9 @@
 package com.rbs.assignment;
 
+import com.rbs.assignment.model.ErrorResponse;
 import com.rbs.assignment.model.PrimeNumberResponse;
 import com.rbs.assignment.util.PrimeNumberUtilTest;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.rbs.assignment.exception.GenericErrorCode.*;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -24,15 +27,37 @@ public class PrimeControllerTest {
 
     @LocalServerPort
     private int port;
-    private TestRestTemplate restTemplate = new TestRestTemplate();
-    HttpHeaders httpHeaders = new HttpHeaders();
+    private TestRestTemplate restTemplate;
     private String baseUrl = "http://localhost:";
-    ResponseEntity<PrimeNumberResponse> responseEntity;
-    private static List<Integer> expectedPrimeNumbers = Arrays.asList(2, 3, 5, 7);
+    private ResponseEntity<PrimeNumberResponse> responseEntity;
+    private List<Integer> expectedPrimeNumbers;
+    private HttpHeaders httpHeaders;
 
+    /**
+     * Test prime number generation based on {upperBound}, negative value,
+     * {@link PrimeNumberUtilTest#KNOWN_PRIMES} and 3 different algorithms
+     */
+
+    @Before
+    public void setUp() {
+        httpHeaders=new HttpHeaders();
+        restTemplate = new TestRestTemplate();
+        expectedPrimeNumbers= Arrays.asList(2, 3, 5, 7);
+    }
 
     @Test
-    public void testWithXmlPathExtension() {
+    public void testPrimeGenerationWithDefaultAlgorithm() {
+        // Test default algorithm
+        httpHeaders.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
+        HttpEntity httpEntity = new HttpEntity(null, httpHeaders);
+        responseEntity = restTemplate.exchange(createUrlWithPort("/primes/10"), HttpMethod.GET, httpEntity, PrimeNumberResponse.class);
+        assertEquals(MediaType.APPLICATION_JSON_UTF8_VALUE.toString(), responseEntity.getHeaders().getContentType().toString());
+        checkBody(responseEntity, expectedPrimeNumbers);
+
+    }
+
+    @Test
+    public void testPrimeGenerationWithXmlPathExtension() {
         HttpEntity httpEntity = new HttpEntity(null, httpHeaders);
         responseEntity = restTemplate.exchange(createUrlWithPort("/primes/10.xml"), HttpMethod.GET, httpEntity, PrimeNumberResponse.class);
         assertEquals("application/xml;charset=UTF-8", responseEntity.getHeaders().getContentType().toString());
@@ -41,16 +66,14 @@ public class PrimeControllerTest {
 
 
     @Test
-    public void test2() {
+    public void testPrimeGenerationWithSieve() {
         HttpEntity httpEntity = new HttpEntity(null, httpHeaders);
-        responseEntity = restTemplate.exchange(createUrlWithPort("/primes/10/?algorithm=fast"), HttpMethod.GET, httpEntity, PrimeNumberResponse.class);
+        responseEntity = restTemplate.exchange(createUrlWithPort("/primes/10/?algorithm=sieve"), HttpMethod.GET, httpEntity, PrimeNumberResponse.class);
         checkBody(responseEntity, expectedPrimeNumbers);
     }
 
     @Test
-    public void testWithSlowAlgorithm() {
-
-        httpHeaders.clear();
+    public void testPrimeGenerationWithSlowALoop() {
         httpHeaders.add("Accept", MediaType.APPLICATION_XML_VALUE);
         HttpEntity httpEntity = new HttpEntity(null, httpHeaders);
         responseEntity = restTemplate.exchange(createUrlWithPort("/primes/10/?algorithm=slow"), HttpMethod.GET, httpEntity, PrimeNumberResponse.class);
@@ -60,8 +83,8 @@ public class PrimeControllerTest {
 
 
     @Test
-    public void test4() {
-        // Test PrimeNumberUtilTest.KNOWN_PRIMES
+    // Test PrimeNumberUtilTest.KNOWN_PRIMES
+    public void testPrimeGenerationWithKnownSet() {
         HttpEntity httpEntity = new HttpEntity(null, httpHeaders);
         responseEntity = restTemplate.exchange(createUrlWithPort("/primes/5000"), HttpMethod.GET, httpEntity, PrimeNumberResponse.class);
         checkBody(responseEntity, PrimeNumberUtilTest.KNOWN_PRIMES);
@@ -69,7 +92,7 @@ public class PrimeControllerTest {
 
 
     @Test
-    public void test5() {
+    public void testPrimeGenerationWithNegativeUpperBound() {
         // Test negative upper bound
         HttpEntity httpEntity = new HttpEntity(null, httpHeaders);
         responseEntity = restTemplate.exchange(createUrlWithPort("/primes/-5000"), HttpMethod.GET, httpEntity, PrimeNumberResponse.class);
@@ -78,26 +101,42 @@ public class PrimeControllerTest {
     }
 
     @Test
-    public void test6() {
+    public void testPrimeGenerationWithJsonPathExtension() {
         HttpEntity httpEntity = new HttpEntity(null, httpHeaders);
         responseEntity = restTemplate.exchange(createUrlWithPort("/primes/10.json"), HttpMethod.GET, httpEntity, PrimeNumberResponse.class);
         assertEquals(MediaType.APPLICATION_JSON_UTF8_VALUE.toString(), responseEntity.getHeaders().getContentType().toString());
         checkBody(responseEntity, expectedPrimeNumbers);
     }
 
-    /**
-     * Test prime number generation based on {upperBound}, negative value,
-     * {@link PrimeNumberUtilTest#KNOWN_PRIMES} and 3 different algorithms
-     */
     @Test
-    public void testPrimeGeneration() {
-        // Test default upper bound
-        httpHeaders.clear();
+    public void testPrimeGenerationWithBadResourceFormat() {
         httpHeaders.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
         HttpEntity httpEntity = new HttpEntity(null, httpHeaders);
-        responseEntity = restTemplate.exchange(createUrlWithPort("/primes/10"), HttpMethod.GET, httpEntity, PrimeNumberResponse.class);
+        ResponseEntity<ErrorResponse> responseEntity = restTemplate.exchange(createUrlWithPort("/primes/abc"), HttpMethod.GET, httpEntity, ErrorResponse.class);
         assertEquals(MediaType.APPLICATION_JSON_UTF8_VALUE.toString(), responseEntity.getHeaders().getContentType().toString());
-        checkBody(responseEntity, expectedPrimeNumbers);
+        assertEquals(HttpStatus.BAD_REQUEST,responseEntity.getStatusCode());
+
+    }
+
+    @Test
+    public void testPrimeGenerationWithHighUpperBound() {
+        httpHeaders.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
+        HttpEntity httpEntity = new HttpEntity(null, httpHeaders);
+        ResponseEntity<ErrorResponse> responseEntity = restTemplate.exchange(createUrlWithPort("/primes/100000000"), HttpMethod.GET, httpEntity, ErrorResponse.class);
+        assertEquals(MediaType.APPLICATION_JSON_UTF8_VALUE.toString(), responseEntity.getHeaders().getContentType().toString());
+        assertEquals(GEN_002.getDefaultMessage(),responseEntity.getBody().getMessage());
+        assertEquals(HttpStatus.BAD_REQUEST,responseEntity.getStatusCode());
+
+    }
+
+    @Test
+    public void testPrimeGenerationWithHighUpperBoundForSlowLoop() {
+        httpHeaders.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
+        HttpEntity httpEntity = new HttpEntity(null, httpHeaders);
+        ResponseEntity<ErrorResponse> responseEntity = restTemplate.exchange(createUrlWithPort("/primes/10000000?algorithm=slow"), HttpMethod.GET, httpEntity, ErrorResponse.class);
+        assertEquals(MediaType.APPLICATION_JSON_UTF8_VALUE.toString(), responseEntity.getHeaders().getContentType().toString());
+        assertEquals(GEN_003.getDefaultMessage(),responseEntity.getBody().getMessage());
+        assertEquals(HttpStatus.BAD_REQUEST,responseEntity.getStatusCode());
 
     }
 
