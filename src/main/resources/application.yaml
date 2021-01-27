@@ -1,9 +1,8 @@
 server:
   servlet:
     port: 8080
-    context-path:
+    context-path: /v1
 
 spring:
-
   application:
     name: prime-numbers

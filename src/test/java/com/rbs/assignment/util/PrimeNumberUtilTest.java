@@ -2,8 +2,10 @@ package com.rbs.assignment.util;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Joydeep Paul
@@ -11,8 +13,7 @@ import static org.junit.Assert.assertTrue;
 public class PrimeNumberUtilTest {
 
     // Known prime numbers
-    public static final int[] KNOWN_PRIMES = {
-            2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
+    public static final List<Integer> KNOWN_PRIMES = Arrays.asList(2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
             31, 37, 41, 43, 47, 53, 59, 61, 67, 71,
             73, 79, 83, 89, 97, 101, 103, 107, 109, 113,
             127, 131, 137, 139, 149, 151, 157, 163, 167, 173,
@@ -78,48 +79,47 @@ public class PrimeNumberUtilTest {
             4663, 4673, 4679, 4691, 4703, 4721, 4723, 4729, 4733, 4751,
             4759, 4783, 4787, 4789, 4793, 4799, 4801, 4813, 4817, 4831,
             4861, 4871, 4877, 4889, 4903, 4909, 4919, 4931, 4933, 4937,
-            4943, 4951, 4957, 4967, 4969, 4973, 4987, 4993, 4999
-    };
+            4943, 4951, 4957, 4967, 4969, 4973, 4987, 4993, 4999);
 
     @Test
-    public void testPrimeByOdds() {
+    public void testPrimeByFast() {
 
         // Validate prime numbers
-        for (int i = 0; i < KNOWN_PRIMES.length; i++) {
-            final int prime = KNOWN_PRIMES[i];
-            assertTrue(prime + " is a prime number", PrimeNumberUtil.isPrimeByOdds(prime));
+        for (int i = 0; i < KNOWN_PRIMES.size(); i++) {
+            final int prime = (int)KNOWN_PRIMES.get(i);
+            assertTrue(prime + " is a prime number", PrimeNumberUtil.isPrimeByFastLoop(prime));
         }
 
         // Validate composite numbers within the same range
-        for (int i = 0, j = 1; i < KNOWN_PRIMES.length && j < KNOWN_PRIMES.length; i++, j++) {
-            int start = KNOWN_PRIMES[i];
-            int end = KNOWN_PRIMES[j];
+        for (int i = 0, j = 1; i < KNOWN_PRIMES.size() && j < KNOWN_PRIMES.size(); i++, j++) {
+            int start = KNOWN_PRIMES.get(i);
+            int end = KNOWN_PRIMES.get(j);
 
             if (end - start > 1) {
                 for (int k = start + 1; k < end; k++) {
-                    assertFalse(k + " is a composite number", PrimeNumberUtil.isPrimeByOdds(k));
+                    assertFalse(k + " is a composite number", PrimeNumberUtil.isPrimeByFastLoop(k));
                 }
             }
         }
     }
 
     @Test
-    public void testPrimeByOddsExcludingMultiplesOfThree() {
+    public void testPrimeBySlow() {
 
         // Validate prime numbers
-        for (int i = 0; i < KNOWN_PRIMES.length; i++) {
-            final int prime = KNOWN_PRIMES[i];
-            assertTrue(prime + " is a prime number", PrimeNumberUtil.isPrimeByOddsExcludingMultiplesOfThree(prime));
+        for (int i = 0; i < KNOWN_PRIMES.size(); i++) {
+            final int prime = KNOWN_PRIMES.get(i);
+            assertTrue(prime + " is a prime number", PrimeNumberUtil.isPrimeBySlowLoop(prime));
         }
 
         // Validate composite numbers within the same range
-        for (int i = 0, j = 1; i < KNOWN_PRIMES.length && j < KNOWN_PRIMES.length; i++, j++) {
-            int start = KNOWN_PRIMES[i];
-            int end = KNOWN_PRIMES[j];
+        for (int i = 0, j = 1; i < KNOWN_PRIMES.size() && j < KNOWN_PRIMES.size(); i++, j++) {
+            int start = KNOWN_PRIMES.get(i);
+            int end = KNOWN_PRIMES.get(j);
 
             if (end - start > 1) {
                 for (int k = start + 1; k < end; k++) {
-                    assertFalse(k + " is a composite number", PrimeNumberUtil.isPrimeByOddsExcludingMultiplesOfThree(k));
+                    assertFalse(k + " is a composite number", PrimeNumberUtil.isPrimeBySlowLoop(k));
                 }
             }
         }
@@ -129,46 +129,8 @@ public class PrimeNumberUtilTest {
     public void testPrimeBySieve() {
 
         // Validate prime numbers
-        for (int i = 0; i < KNOWN_PRIMES.length; i++) {
-            final int prime = KNOWN_PRIMES[i];
-            assertTrue(prime + " is a prime number", PrimeNumberUtil.isPrimeBySieve(prime));
-        }
-
-        // Validate composite numbers within the same range
-        for (int i = 0, j = 1; i < KNOWN_PRIMES.length && j < KNOWN_PRIMES.length; i++, j++) {
-            int start = KNOWN_PRIMES[i];
-            int end = KNOWN_PRIMES[j];
-
-            if (end - start > 1) {
-                for (int k = start + 1; k < end; k++) {
-                    assertFalse(k + " is a composite number", PrimeNumberUtil.isPrimeBySieve(k));
-                }
-            }
-        }
+            assertEquals(KNOWN_PRIMES, PrimeNumberUtil.isPrimeBySieve(5000));
     }
 
-    @Test
-    public void testIsOdd() {
-        for (int i = 2; i < 100_000_000; i+=2) {
-            assertFalse(i + " is even", PrimeNumberUtil.isOdd(i));
-            int odd = i - 1;
-            assertTrue(odd + " is odd", PrimeNumberUtil.isOdd(odd));
-        }
-    }
-
-    @Test
-    public void testSieve() {
-        for (int i = 0; i < PrimeNumberUtil.sieve.length; i++) {
-            final boolean isPrime = PrimeNumberUtil.sieve[i];
-            if (i == 0 || i == 1) {
-                assertFalse(isPrime);
-            } else if (isPrime) {
-                // the sieve believes that i is prime, it should be reported as such.
-                assertTrue(i + " is reported as prime by sieve", PrimeNumberUtil.isPrimeByOddsExcludingMultiplesOfThree(i));
-            } else {
-                // the sieve believes that i is non-prime, it should be reported as such.
-                assertFalse(i + " is reported as non-prime by sieve", PrimeNumberUtil.isPrimeByOddsExcludingMultiplesOfThree(i));
-            }
-        }
-    }
 }
+

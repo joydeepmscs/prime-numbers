@@ -11,6 +11,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * This Configuration integrates Swagger2 into the existing Spring Boot project.
+ *  @author Joydeep Paul
  */
 @Configuration
 @EnableSwagger2
@@ -18,6 +19,8 @@ public class SwaggerConfiguration {
 
     @Bean
     public Docket swagger() {
-        return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.basePackage("com.rbs.assignment.controller")).paths(PathSelectors.any()).build();
+        return new Docket(DocumentationType.SWAGGER_2).select().
+                apis(RequestHandlerSelectors.basePackage("com.rbs.assignment.controller")).
+                paths(PathSelectors.any()).build();
     }
 }

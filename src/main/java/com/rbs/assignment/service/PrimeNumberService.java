@@ -1,5 +1,6 @@
 package com.rbs.assignment.service;
 
+import com.rbs.assignment.exception.PrimeNumberProcessingException;
 import com.rbs.assignment.util.PrimeNumberUtil;
 
 import java.util.List;
@@ -12,26 +13,34 @@ import java.util.List;
 public interface PrimeNumberService {
 
     /**
-     * @see PrimeNumberUtil#isPrimeByOdds(int)
+     * @see PrimeNumberUtil#isPrimeBySlowLoop(int)
      */
-    boolean isPrime(int n);
+    boolean isPrimeSlowLoop(int n);
 
     /**
-     * @see PrimeNumberUtil#isPrimeBySieve(int)
-     */
-    boolean isPrimeSieve(int n);
-
-    /**
-     * @see PrimeNumberUtil#isPrimeByOddsExcludingMultiplesOfThree(int)
+     * @see PrimeNumberUtil#isPrimeByFastLoop(int)
      */
     boolean isPrimeFastLoop(int n);
 
     /**
-     * Returns a {@link List} of prime numbers given an (inclusive) upper bound
      * @param upperBound The inclusive upper bound to limit the size of the returned primes
      * @return a {@link List} of prime numbers given an (inclusive) upper bound
+     * @see PrimeNumberUtil#isPrimeBySlowLoop(int)
      */
-    List<Integer> getPrimes(int upperBound);
-    List<Integer> getPrimesUsingSieve(int upperBound);
-    List<Integer> getPrimesUsingFastLoop(int upperBound);
+    List<Integer> getPrimesUsingSlowLoop(int upperBound) throws PrimeNumberProcessingException;
+
+    /**
+     * @param upperBound The inclusive upper bound to limit the size of the returned primes
+     * @return a {@link List} of prime numbers given an (inclusive) upper bound
+     * @see PrimeNumberUtil#isPrimeBySieve(int)
+     */
+
+    List<Integer> getPrimesUsingSieve(int upperBound) throws PrimeNumberProcessingException;
+    
+    /**
+     * @param upperBound The inclusive upper bound to limit the size of the returned primes
+     * @return a {@link List} of prime numbers given an (inclusive) upper bound
+     * @see PrimeNumberUtil#isPrimeByFastLoop(int) 
+     */
+    List<Integer> getPrimesUsingFastLoop(int upperBound) throws PrimeNumberProcessingException;
 }
