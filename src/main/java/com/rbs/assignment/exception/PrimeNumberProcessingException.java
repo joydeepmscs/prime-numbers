@@ -5,7 +5,8 @@ import java.io.PrintWriter;
 
 /**
  * PrimeNumberProcessingException is thrown in case of any error during processing.
- *  @author Joydeep Paul
+ *
+ * @author Joydeep Paul
  */
 public class PrimeNumberProcessingException extends Exception {
     private final String code;
