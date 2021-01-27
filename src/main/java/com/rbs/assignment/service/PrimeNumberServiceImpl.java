@@ -33,7 +33,7 @@ public class PrimeNumberServiceImpl implements PrimeNumberService {
     }
 
     @Override
-    @Cacheable(value = "primeNumberCache", key="#upperBound")
+    @Cacheable(value = "primeNumberCache", key="'slow'.concat('-').concat(#upperBound)")
     public List<Integer> getPrimesUsingSlowLoop(int upperBound) throws PrimeNumberProcessingException {
         log.debug("****** Inside getPrimesUsingSlowLoop ******");
         List<Integer> primeNumbers;
@@ -62,7 +62,7 @@ public class PrimeNumberServiceImpl implements PrimeNumberService {
     }
 
     @Override
-    @Cacheable(value = "primeNumberCache", key="#upperBound")
+    @Cacheable(value = "primeNumberCache", key="'sieve'.concat('-').concat(#upperBound)")
     public List<Integer> getPrimesUsingSieve(int upperBound) throws PrimeNumberProcessingException {
         log.debug("****** Inside getPrimesUsingSieve ******");
         List<Integer> primeNumbers;
@@ -92,7 +92,7 @@ public class PrimeNumberServiceImpl implements PrimeNumberService {
     }
 
     @Override
-    @Cacheable(value = "primeNumberCache", key="#upperBound")
+    @Cacheable(value = "primeNumberCache", key="'fast'.concat('-').concat(#upperBound)")
     public List<Integer> getPrimesUsingFastLoop(int upperBound) throws PrimeNumberProcessingException {
         log.debug("****** Inside getPrimesUsingFastLoop ******");
         List<Integer> primeNumbers;

@@ -40,8 +40,10 @@ public class EHCacheConfig {
 
 
     @Bean
-    public EhCacheManagerFactoryBean cacheManagerFactoryBean() {
-        return new EhCacheManagerFactoryBean();
+    public EhCacheManagerFactoryBean ehCacheManagerFactoryBean() {
+        EhCacheManagerFactoryBean ehCacheManagerFactoryBean = new EhCacheManagerFactoryBean();
+        ehCacheManagerFactoryBean.setShared(true);
+        return ehCacheManagerFactoryBean;
     }
 
     @Bean
@@ -58,9 +60,11 @@ public class EHCacheConfig {
                 .persistence(new PersistenceConfiguration().strategy(PersistenceConfiguration.Strategy.valueOf(persistenceStrategy.toUpperCase())))
                 .name(cacheName);
 
-        Cache primeNumberCache = new Cache(primeNumberEhCacheConfig);
+        if(ehCacheManagerFactoryBean().getObject().getCache(cacheName)==null) {
+            Cache primeNumberCache = new Cache(primeNumberEhCacheConfig);
+            ehCacheManagerFactoryBean().getObject().addCache(primeNumberCache);
+        }
 
-        cacheManagerFactoryBean().getObject().addCache(primeNumberCache);
-        return new EhCacheCacheManager(cacheManagerFactoryBean().getObject());
+        return new EhCacheCacheManager(ehCacheManagerFactoryBean().getObject());
     }
 }
