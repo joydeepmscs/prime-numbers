@@ -41,18 +41,16 @@ public class PrimeNumberServiceImpl implements PrimeNumberService {
                 return Collections.emptyList();
 
             }
-            UpperBoundValidation(upperBound,"slow");
+            UpperBoundValidation(upperBound, "slow");
             // using Java 8 Stream API and multi-threading using parallel.
             primeNumbers = IntStream.rangeClosed(2, upperBound).parallel()
                     .filter(this::isPrimeSlowLoop)
                     .boxed()
                     .collect(Collectors.toList());
-        }
-        catch (PrimeNumberProcessingException e) {
+        } catch (PrimeNumberProcessingException e) {
             throw new PrimeNumberProcessingException(e.getCode(), e.getErrorMessage());
-        }
-        catch (Exception e) {
-            log.error("exception occurred while generating prime numbers :: {}",e.getMessage());
+        } catch (Exception e) {
+            log.error("exception occurred while generating prime numbers :: {}", e.getMessage());
             throw new PrimeNumberProcessingException(GEN_001.getCode(), GEN_001.getDefaultMessage());
         }
         return primeNumbers;
@@ -67,14 +65,12 @@ public class PrimeNumberServiceImpl implements PrimeNumberService {
                 log.info("The number is less than 2");
                 return Collections.emptyList();
             }
-            UpperBoundValidation(upperBound,"sieve");
+            UpperBoundValidation(upperBound, "sieve");
             primeNumbers = PrimeNumberUtil.isPrimeBySieve(upperBound);
-        }
-        catch (PrimeNumberProcessingException e) {
+        } catch (PrimeNumberProcessingException e) {
             throw new PrimeNumberProcessingException(e.getCode(), e.getErrorMessage());
-        }
-        catch (Exception e) {
-            log.error("exception occurred while generating prime numbers :: {}",e.getMessage());
+        } catch (Exception e) {
+            log.error("exception occurred while generating prime numbers :: {}", e.getMessage());
             throw new PrimeNumberProcessingException(GEN_001.getCode(), GEN_001.getDefaultMessage());
         }
         return primeNumbers;
@@ -89,19 +85,16 @@ public class PrimeNumberServiceImpl implements PrimeNumberService {
                 log.info("The number is less than 2");
                 return Collections.emptyList();
             }
-            UpperBoundValidation(upperBound,"fast");
+            UpperBoundValidation(upperBound, "fast");
             // using Java 8 Stream API and multi-threading using parallel.
             primeNumbers = IntStream.rangeClosed(2, upperBound).parallel()
                     .filter(this::isPrimeFastLoop)
                     .boxed()
                     .collect(Collectors.toList());
-        }
-        catch (PrimeNumberProcessingException e) {
+        } catch (PrimeNumberProcessingException e) {
             throw new PrimeNumberProcessingException(e.getCode(), e.getErrorMessage());
-        }
-
-        catch (Exception e) {
-            log.error("exception occurred while generating prime numbers :: {}",e.getMessage());
+        } catch (Exception e) {
+            log.error("exception occurred while generating prime numbers :: {}", e.getMessage());
             throw new PrimeNumberProcessingException(GEN_001.getCode(), GEN_001.getDefaultMessage());
         }
 
@@ -109,12 +102,12 @@ public class PrimeNumberServiceImpl implements PrimeNumberService {
     }
 
     private void UpperBoundValidation(int n, String algorithm) throws PrimeNumberProcessingException {
-        if(n>1000000 & algorithm.equals("slow")){
-            log.warn("upper bound greater than 10^6 is not accepted for slow algorithm. Value entered: {} ",n);
+        if (n > 1000000 & algorithm.equals("slow")) {
+            log.warn("upper bound greater than 10^6 is not accepted for slow algorithm. Value entered: {} ", n);
             throw new PrimeNumberProcessingException(GEN_003.getCode(), GEN_003.getDefaultMessage());
         }
-        if(n>10000000){
-            log.warn("upper bound greater than 10^7 is not accepted. Value entered: {} ",n);
+        if (n > 10000000) {
+            log.warn("upper bound greater than 10^7 is not accepted. Value entered: {} ", n);
             throw new PrimeNumberProcessingException(GEN_002.getCode(), GEN_002.getDefaultMessage());
         }
     }

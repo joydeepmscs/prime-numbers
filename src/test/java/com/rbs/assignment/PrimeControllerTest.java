@@ -40,9 +40,9 @@ public class PrimeControllerTest {
 
     @Before
     public void setUp() {
-        httpHeaders=new HttpHeaders();
+        httpHeaders = new HttpHeaders();
         restTemplate = new TestRestTemplate();
-        expectedPrimeNumbers= Arrays.asList(2, 3, 5, 7);
+        expectedPrimeNumbers = Arrays.asList(2, 3, 5, 7);
     }
 
     @Test
@@ -114,7 +114,7 @@ public class PrimeControllerTest {
         HttpEntity httpEntity = new HttpEntity(null, httpHeaders);
         ResponseEntity<ErrorResponse> responseEntity = restTemplate.exchange(createUrlWithPort("/primes/abc"), HttpMethod.GET, httpEntity, ErrorResponse.class);
         assertEquals(MediaType.APPLICATION_JSON_UTF8_VALUE.toString(), responseEntity.getHeaders().getContentType().toString());
-        assertEquals(HttpStatus.BAD_REQUEST,responseEntity.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
 
     }
 
@@ -124,8 +124,8 @@ public class PrimeControllerTest {
         HttpEntity httpEntity = new HttpEntity(null, httpHeaders);
         ResponseEntity<ErrorResponse> responseEntity = restTemplate.exchange(createUrlWithPort("/primes/100000000"), HttpMethod.GET, httpEntity, ErrorResponse.class);
         assertEquals(MediaType.APPLICATION_JSON_UTF8_VALUE.toString(), responseEntity.getHeaders().getContentType().toString());
-        assertEquals(GEN_002.getDefaultMessage(),responseEntity.getBody().getMessage());
-        assertEquals(HttpStatus.BAD_REQUEST,responseEntity.getStatusCode());
+        assertEquals(GEN_002.getDefaultMessage(), responseEntity.getBody().getMessage());
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
 
     }
 
@@ -135,8 +135,8 @@ public class PrimeControllerTest {
         HttpEntity httpEntity = new HttpEntity(null, httpHeaders);
         ResponseEntity<ErrorResponse> responseEntity = restTemplate.exchange(createUrlWithPort("/primes/10000000?algorithm=slow"), HttpMethod.GET, httpEntity, ErrorResponse.class);
         assertEquals(MediaType.APPLICATION_JSON_UTF8_VALUE.toString(), responseEntity.getHeaders().getContentType().toString());
-        assertEquals(GEN_003.getDefaultMessage(),responseEntity.getBody().getMessage());
-        assertEquals(HttpStatus.BAD_REQUEST,responseEntity.getStatusCode());
+        assertEquals(GEN_003.getDefaultMessage(), responseEntity.getBody().getMessage());
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
 
     }
 

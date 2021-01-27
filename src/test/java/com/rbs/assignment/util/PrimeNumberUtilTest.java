@@ -86,7 +86,7 @@ public class PrimeNumberUtilTest {
 
         // Validate prime numbers
         for (int i = 0; i < KNOWN_PRIMES.size(); i++) {
-            final int prime = (int)KNOWN_PRIMES.get(i);
+            final int prime = (int) KNOWN_PRIMES.get(i);
             assertTrue(prime + " is a prime number", PrimeNumberUtil.isPrimeByFastLoop(prime));
         }
 
@@ -129,7 +129,7 @@ public class PrimeNumberUtilTest {
     public void testPrimeBySieve() {
 
         // Validate prime numbers
-            assertEquals(KNOWN_PRIMES, PrimeNumberUtil.isPrimeBySieve(5000));
+        assertEquals(KNOWN_PRIMES, PrimeNumberUtil.isPrimeBySieve(5000));
     }
 
 }

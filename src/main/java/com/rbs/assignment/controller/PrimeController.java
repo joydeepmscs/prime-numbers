@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.rbs.assignment.exception.GenericErrorCode.GEN_001;
-
 /**
  * REST Controller which serves as an entry-point for requests for prime number information.
  *
@@ -36,7 +34,7 @@ public class PrimeController {
      */
 
     @RequestMapping(method = RequestMethod.GET, value = "/primes/{upperbound}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}, consumes = MediaType.ALL_VALUE)
-    ResponseEntity<PrimeNumberResponse> getPrimes(@PathVariable("upperbound") int upperBound,
+    ResponseEntity<PrimeNumberResponse> getPrimeNumbers(@PathVariable("upperbound") int upperBound,
                                                   @ApiParam(value = "algorithm", allowableValues = "default,sieve,slow") @RequestParam(value = "algorithm", required = false, defaultValue = "default") String algorithm) throws PrimeNumberProcessingException {
         log.debug("****** Starting getPrimes ******");
         ResponseEntity<PrimeNumberResponse> responseEntity = null;

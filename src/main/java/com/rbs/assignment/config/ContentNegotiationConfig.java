@@ -13,8 +13,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class ContentNegotiationConfig implements WebMvcConfigurer {
 
     /**
-     *  This Configuration enables content negotiation based on different requested types
-     *   @author Joydeep Paul
+     * This Configuration enables content negotiation based on different requested types
+     *
+     * @author Joydeep Paul
      */
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
