@@ -30,9 +30,10 @@ public interface PrimeNumberService {
     List<Integer> getPrimesUsingSlowLoop(int upperBound) throws PrimeNumberProcessingException;
 
     /**
+     * This method returns list of prime number for a given range using sieve of eratosthenes
+     *
      * @param upperBound The inclusive upper bound to limit the size of the returned primes
      * @return a {@link List} of prime numbers given an (inclusive) upper bound
-     * @see PrimeNumberUtil#isPrimeBySieve(int)
      */
 
     List<Integer> getPrimesUsingSieve(int upperBound) throws PrimeNumberProcessingException;

@@ -125,12 +125,6 @@ public class PrimeNumberUtilTest {
         }
     }
 
-    @Test
-    public void testPrimeBySieve() {
-
-        // Validate prime numbers
-        assertEquals(KNOWN_PRIMES, PrimeNumberUtil.isPrimeBySieve(5000));
-    }
 
 }
 

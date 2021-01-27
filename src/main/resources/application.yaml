@@ -6,3 +6,18 @@ server:
 spring:
   application:
     name: prime-numbers
+
+prime:
+  cache:
+    name: primeNumberCache
+    maxentries: 250
+    eviction:
+      policy: LRU
+    persistence:
+      strategy: LOCALTEMPSWAP
+    time:
+      to:
+        idle:
+          sec: 300
+        live:
+          sec: 900

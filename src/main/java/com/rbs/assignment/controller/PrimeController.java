@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,6 @@ public class PrimeController {
      * @param algorithm  The algorithm to use. Defaults to Sieve
      * @return a list of prime numbers from 2 to the upperBound (inclusive)
      */
-
     @RequestMapping(method = RequestMethod.GET, value = "/primes/{upperbound}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}, consumes = MediaType.ALL_VALUE)
     ResponseEntity<PrimeNumberResponse> getPrimeNumbers(@PathVariable("upperbound") int upperBound,
                                                   @ApiParam(value = "algorithm", allowableValues = "default,sieve,slow") @RequestParam(value = "algorithm", required = false, defaultValue = "default") String algorithm) throws PrimeNumberProcessingException {

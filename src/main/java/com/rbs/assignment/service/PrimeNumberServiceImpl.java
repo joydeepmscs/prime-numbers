@@ -4,6 +4,7 @@ import com.rbs.assignment.exception.PrimeNumberProcessingException;
 import com.rbs.assignment.util.PrimeNumberUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -32,6 +33,7 @@ public class PrimeNumberServiceImpl implements PrimeNumberService {
     }
 
     @Override
+    @Cacheable(value = "primeNumberCache", key="#upperBound")
     public List<Integer> getPrimesUsingSlowLoop(int upperBound) throws PrimeNumberProcessingException {
         log.debug("****** Inside getPrimesUsingSlowLoop ******");
         List<Integer> primeNumbers;
@@ -42,11 +44,14 @@ public class PrimeNumberServiceImpl implements PrimeNumberService {
 
             }
             UpperBoundValidation(upperBound, "slow");
+
             // using Java 8 Stream API and multi-threading using parallel.
             primeNumbers = IntStream.rangeClosed(2, upperBound).parallel()
                     .filter(this::isPrimeSlowLoop)
                     .boxed()
                     .collect(Collectors.toList());
+
+
         } catch (PrimeNumberProcessingException e) {
             throw new PrimeNumberProcessingException(e.getCode(), e.getErrorMessage());
         } catch (Exception e) {
@@ -57,6 +62,7 @@ public class PrimeNumberServiceImpl implements PrimeNumberService {
     }
 
     @Override
+    @Cacheable(value = "primeNumberCache", key="#upperBound")
     public List<Integer> getPrimesUsingSieve(int upperBound) throws PrimeNumberProcessingException {
         log.debug("****** Inside getPrimesUsingSieve ******");
         List<Integer> primeNumbers;
@@ -66,7 +72,16 @@ public class PrimeNumberServiceImpl implements PrimeNumberService {
                 return Collections.emptyList();
             }
             UpperBoundValidation(upperBound, "sieve");
-            primeNumbers = PrimeNumberUtil.isPrimeBySieve(upperBound);
+
+            boolean[] sieve = PrimeNumberUtil.createSieve(upperBound);
+
+            // using Java 8 Stream API and multi-threading using parallel.
+            primeNumbers = IntStream.rangeClosed(2, upperBound).parallel()
+                    .filter(n -> sieve[n])
+                    .boxed()
+                    .collect(Collectors.toList());
+
+
         } catch (PrimeNumberProcessingException e) {
             throw new PrimeNumberProcessingException(e.getCode(), e.getErrorMessage());
         } catch (Exception e) {
@@ -77,6 +92,7 @@ public class PrimeNumberServiceImpl implements PrimeNumberService {
     }
 
     @Override
+    @Cacheable(value = "primeNumberCache", key="#upperBound")
     public List<Integer> getPrimesUsingFastLoop(int upperBound) throws PrimeNumberProcessingException {
         log.debug("****** Inside getPrimesUsingFastLoop ******");
         List<Integer> primeNumbers;
@@ -85,12 +101,16 @@ public class PrimeNumberServiceImpl implements PrimeNumberService {
                 log.info("The number is less than 2");
                 return Collections.emptyList();
             }
+
             UpperBoundValidation(upperBound, "fast");
+
             // using Java 8 Stream API and multi-threading using parallel.
             primeNumbers = IntStream.rangeClosed(2, upperBound).parallel()
                     .filter(this::isPrimeFastLoop)
                     .boxed()
                     .collect(Collectors.toList());
+
+
         } catch (PrimeNumberProcessingException e) {
             throw new PrimeNumberProcessingException(e.getCode(), e.getErrorMessage());
         } catch (Exception e) {
